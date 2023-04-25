@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 
-class Bank{
+class BankAccount{
     private:
     std::unique_ptr<std::string> clientName;
     std::unique_ptr<std::string> clientCPF;
@@ -36,7 +36,7 @@ class Bank{
     }
 
     //Construtor padrão
-    Bank(std::string name, std::string cpf, std::string email, unsigned int acc){
+    BankAccount(std::string name, std::string cpf, std::string email, unsigned int acc){
         clientName = std::make_unique<std::string>(name);
         clientCPF = std::make_unique<std::string>(cpf);
         clientEmail = std::make_unique<std::string>(email);
@@ -44,7 +44,7 @@ class Bank{
         
     }
     //Construtor copia
-    Bank(const Bank& other) {
+    BankAccount(const BankAccount& other) {
         clientName = std::make_unique<std::string>(*(other.clientName));
         clientCPF = std::make_unique<std::string>(*(other.clientCPF));
         clientEmail = std::make_unique<std::string>(*(other.clientEmail));
@@ -52,7 +52,7 @@ class Bank{
     }
 
     //Construtor de movimento
-    Bank(Bank&& other) noexcept {
+    BankAccount(BankAccount&& other) noexcept {
         clientName = std::move(other.clientName);
         clientCPF = std::move(other.clientCPF);
         clientEmail = std::move(other.clientEmail);
@@ -60,7 +60,7 @@ class Bank{
     }
 
     //Operador de atribuição de movimento
-    Bank& operator=(Bank&& other) noexcept {
+    BankAccount& operator=(BankAccount&& other) noexcept {
         if (this != &other) {
             clientName = std::move(other.clientName);
             clientCPF = std::move(other.clientCPF);
@@ -71,6 +71,43 @@ class Bank{
     }
 };
 int main(){
-    
+    //Declarando os smart pointers
+    std::unique_ptr<std::string> nameClient;
+    std::unique_ptr<std::string> cpfClient;
+    std::unique_ptr<std::string> emailClient;
+    std::unique_ptr<unsigned int> accountNumber;
+    std::unique_ptr<unsigned int> choice;
+
+    //Inicializando os smart pointers
+    nameClient = std::make_unique<std::string>();
+    cpfClient = std::make_unique<std::string>();
+    emailClient = std::make_unique<std::string>();
+    accountNumber = std::make_unique<unsigned int>();
+    choice = std::make_unique<unsigned int>();
+
+    //Programa principal
+    std::cout << "Ola, seja bem vindo ao seu banco! \n" << "Escolha a opcao desejada \n" << "1 - Cadastrar cliente \n" << "2 - Consultar saldo \n" << "3 - Depositar \n" << "4 - Sacar \n" << "5 - Sair \n";
+        std::cin >> *choice;
+        std::cin.clear();
+        if(*choice == 1){
+            std::cout << "Digite o nome do cliente: ";
+            std::cin >> *nameClient;
+            std::cout << "Digite o CPF do cliente: ";
+            std::cin >> *cpfClient;
+            std::cout << "Digite o email do cliente: ";
+            std::cin >> *emailClient;
+            std::cout << "Digite o numero da conta: ";
+            std::cin >> *accountNumber;
+            BankAccount client(std::move(*nameClient), std::move(*cpfClient), std::move(*emailClient), std::move(*accountNumber));
+            client.setClientName(std::move(*nameClient));
+            client.setClientCPF(std::move(*cpfClient));
+            client.setClientEmail(std::move(*emailClient));
+            client.setAccountNumber(std::move(*accountNumber));
+        }
+        
+
+
+
         return 0;
+
 }
