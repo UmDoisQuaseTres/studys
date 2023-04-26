@@ -8,6 +8,9 @@ class BankAccount{
     std::unique_ptr<std::string> clientCPF;
     std::unique_ptr<std::string> clientEmail;
     std::unique_ptr<unsigned int> accountNumber;
+    std::unique_ptr<int> balance;
+    std::unique_ptr<unsigned int> deposit;
+    std::unique_ptr<unsigned int> withdraw;
     
     public:
     void setClientName(std::string name){
@@ -22,6 +25,15 @@ class BankAccount{
     void setAccountNumber(unsigned int acc){
         accountNumber = std::make_unique<unsigned int>(acc);
     }
+    void setBalance(int bal){
+        balance = std::make_unique<int>(bal);
+    }
+    void setDeposit(unsigned int dep){
+        deposit = std::make_unique<unsigned int>(dep);
+    }
+    void setWithdraw(unsigned int wit){
+        withdraw = std::make_unique<unsigned int>(wit);
+    }
     std::string getClientName(){
         return *clientName;
     }
@@ -34,13 +46,19 @@ class BankAccount{
     unsigned int getAccountNumber(){
         return *accountNumber;
     }
+    int getBalance(){
+        return *balance;
+    }
 
     //Construtor padrão
-    BankAccount(std::string name, std::string cpf, std::string email, unsigned int acc){
+    BankAccount(std::string name, std::string cpf, std::string email, unsigned int acc, int bal, unsigned int dep, unsigned int wit){
         clientName = std::make_unique<std::string>(name);
         clientCPF = std::make_unique<std::string>(cpf);
         clientEmail = std::make_unique<std::string>(email);
         accountNumber = std::make_unique<unsigned int>(acc);
+        balance = std::make_unique<int>(bal);
+        deposit = std::make_unique<unsigned int>(dep);
+        withdraw = std::make_unique<unsigned int>(wit);
         
     }
     //Construtor copia
@@ -48,7 +66,10 @@ class BankAccount{
         clientName = std::make_unique<std::string>(*(other.clientName));
         clientCPF = std::make_unique<std::string>(*(other.clientCPF));
         clientEmail = std::make_unique<std::string>(*(other.clientEmail));
-        accountNumber = std::make_unique<unsigned int>(*(other.accountNumber));    
+        accountNumber = std::make_unique<unsigned int>(*(other.accountNumber));
+        balance = std::make_unique<int>(*(other.balance));
+        deposit = std::make_unique<unsigned int>(*(other.deposit));
+        withdraw = std::make_unique<unsigned int>(*(other.withdraw));    
     }
 
     //Construtor de movimento
@@ -57,6 +78,9 @@ class BankAccount{
         clientCPF = std::move(other.clientCPF);
         clientEmail = std::move(other.clientEmail);
         accountNumber = std::move(other.accountNumber);
+        balance = std::move(other.balance);
+        deposit = std::move(other.deposit);
+        withdraw = std::move(other.withdraw);
     }
 
     //Operador de atribuição de movimento
@@ -66,44 +90,63 @@ class BankAccount{
             clientCPF = std::move(other.clientCPF);
             clientEmail = std::move(other.clientEmail);
             accountNumber = std::move(other.accountNumber);
+            balance = std::move(other.balance);
+            deposit = std::move(other.deposit);
+            withdraw = std::move(other.withdraw);
         }
         return *this;
     }
 };
 int main(){
     //Declarando os smart pointers
-    std::unique_ptr<std::string> nameClient;
-    std::unique_ptr<std::string> cpfClient;
-    std::unique_ptr<std::string> emailClient;
-    std::unique_ptr<unsigned int> accountNumber;
-    std::unique_ptr<unsigned int> choice;
+    std::unique_ptr<std::string> nameClient = std::make_unique<std::string>();
+    std::unique_ptr<std::string> cpfClient = std::make_unique<std::string>();
+    std::unique_ptr<std::string> emailClient = std::make_unique<std::string>();
+    std::unique_ptr<unsigned int> accountNumber = std::make_unique<unsigned int>();
+    std::unique_ptr<unsigned int> choice = std::make_unique<unsigned int>();
+    std::unique_ptr<int> balance = std::make_unique<int>();
+    std::unique_ptr<unsigned int> deposit = std::make_unique<unsigned int>();
+    std::unique_ptr<unsigned int> withdraw = std::make_unique<unsigned int>();
 
     //Inicializando os smart pointers
-    nameClient = std::make_unique<std::string>();
-    cpfClient = std::make_unique<std::string>();
-    emailClient = std::make_unique<std::string>();
-    accountNumber = std::make_unique<unsigned int>();
-    choice = std::make_unique<unsigned int>();
+    
 
+    BankAccount client(*nameClient, *cpfClient, *emailClient, *accountNumber, *balance, *deposit, *withdraw);
     //Programa principal
     std::cout << "Ola, seja bem vindo ao seu banco! \n" << "Escolha a opcao desejada \n" << "1 - Cadastrar cliente \n" << "2 - Consultar saldo \n" << "3 - Depositar \n" << "4 - Sacar \n" << "5 - Sair \n";
         std::cin >> *choice;
         std::cin.clear();
         if(*choice == 1){
-            std::cout << "Digite o nome do cliente: ";
+
+            //Recebendo os dados via teclado
+            std::cout << "Digite o nome do cliente: \n";
             std::cin >> *nameClient;
-            std::cout << "Digite o CPF do cliente: ";
+            std::cout << "Digite o CPF do cliente: \n";
             std::cin >> *cpfClient;
-            std::cout << "Digite o email do cliente: ";
+            std::cout << "Digite o email do cliente: \n";
             std::cin >> *emailClient;
-            std::cout << "Digite o numero da conta: ";
+            std::cout << "Digite o numero da conta: \n";
             std::cin >> *accountNumber;
-            BankAccount client(std::move(*nameClient), std::move(*cpfClient), std::move(*emailClient), std::move(*accountNumber));
+            std::cout << "Digite o saldo inicial: \n";
+            std::cin >> *balance;
+
+            //Salvando os dados no objeto
             client.setClientName(std::move(*nameClient));
             client.setClientCPF(std::move(*cpfClient));
             client.setClientEmail(std::move(*emailClient));
             client.setAccountNumber(std::move(*accountNumber));
-        }
+            client.setBalance(std::move(*balance));
+
+            //Mensagem de sucesso
+            std::cout << "Cliente cadastrado com sucesso! \n";
+        }else if(*choice == 2){
+            *balance = client.getBalance();
+            return *balance;
+        } /*else if(*choice == 3){
+            std::cout << "Digite o valor que deseja depositar: \n";
+            std::cin >> *balance;
+            client.setBalance(std::move(*balance));
+        }*/
         
 
 
