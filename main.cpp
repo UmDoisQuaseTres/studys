@@ -15,6 +15,8 @@ class BankAccount{
     std::unique_ptr<unsigned int> withdraw;
     
     public:
+
+    //Setters
     void setClientName(std::string name){
         clientName = std::make_unique<std::string>(name);
     }
@@ -36,6 +38,8 @@ class BankAccount{
     void setWithdraw(unsigned int wit){
         withdraw = std::make_unique<unsigned int>(wit);
     }
+
+    //Getters
     std::string getClientName(){
         return *clientName;
     }
@@ -98,6 +102,15 @@ class BankAccount{
         }
         return *this;
     }
+
+    void deposit_balance(unsigned int deps){
+        deps = *deposit;
+        *balance += deps;
+    }
+    void withdraw_balance(unsigned int witd){
+        witd = *withdraw;
+        *balance -= witd;
+    }
 };
 int main(){
     //Declarando os smart pointers
@@ -110,9 +123,11 @@ int main(){
     std::unique_ptr<unsigned int> deposit = std::make_unique<unsigned int>(0);
     std::unique_ptr<unsigned int> withdraw = std::make_unique<unsigned int>(0);
 
+    //Criando objeto client
     BankAccount client(*nameClient, *cpfClient, *emailClient, *accountNumber, *balance, *deposit, *withdraw);
 
     do{
+
     //Programa principal
     std::cout << "Ola, seja bem vindo ao seu banco! \n" << "Escolha a opcao desejada \n" << "1 - Cadastrar cliente \n" << "2 - Consultar conta \n" << "3 - Depositar \n" << "4 - Sacar \n" << "5 - Sair \n";
         std::cin >> *choice;
@@ -153,6 +168,12 @@ int main(){
             *accountNumber = client.getAccountNumber();
         
             std::cout << "Dados da conta: \n" << "Saldo: " << *balance << "\n" << "Nome: " << *nameClient << "\n" << "CPF: " << *cpfClient << "\n" << "Email: " << *emailClient << "\n" << "Numero da conta: " << *accountNumber << "\n";
+        }else if(*choice == 3){
+
+        std::cout << "Digite o valor a ser depositado: \n";
+        std::cin >> std::ws >> *deposit;
+        std::cin.clear();
+
         } 
     }while(*choice != 5);
 
