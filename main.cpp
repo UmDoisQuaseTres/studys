@@ -10,7 +10,7 @@ class BankAccount{
     std::unique_ptr<std::string> clientCPF;
     std::unique_ptr<std::string> clientEmail;
     std::unique_ptr<unsigned int> accountNumber;
-    std::unique_ptr<int> balance;
+    std::unique_ptr<unsigned int> balance;
     std::unique_ptr<unsigned int> deposit;
     std::unique_ptr<unsigned int> withdraw;
     
@@ -30,7 +30,7 @@ class BankAccount{
         accountNumber = std::make_unique<unsigned int>(acc);
     }
     void setBalance(int bal){
-        balance = std::make_unique<int>(bal);
+        balance = std::make_unique<unsigned int>(bal);
     }
     void setDeposit(unsigned int dep){
         deposit = std::make_unique<unsigned int>(dep);
@@ -52,17 +52,17 @@ class BankAccount{
     unsigned int getAccountNumber(){
         return *accountNumber;
     }
-    int getBalance(){
+    unsigned int getBalance(){
         return *balance;
     }
 
     //Construtor padrão
-    BankAccount(std::string name, std::string cpf, std::string email, unsigned int acc, int bal, unsigned int dep, unsigned int wit){
+    BankAccount(std::string name, std::string cpf, std::string email, unsigned int acc, unsigned int bal, unsigned int dep, unsigned int wit){
         clientName = std::make_unique<std::string>(name);
         clientCPF = std::make_unique<std::string>(cpf);
         clientEmail = std::make_unique<std::string>(email);
         accountNumber = std::make_unique<unsigned int>(acc);
-        balance = std::make_unique<int>(bal);
+        balance = std::make_unique<unsigned int>(bal);
         deposit = std::make_unique<unsigned int>(dep);
         withdraw = std::make_unique<unsigned int>(wit);
         
@@ -73,7 +73,7 @@ class BankAccount{
         clientCPF = std::make_unique<std::string>(*(other.clientCPF));
         clientEmail = std::make_unique<std::string>(*(other.clientEmail));
         accountNumber = std::make_unique<unsigned int>(*(other.accountNumber));
-        balance = std::make_unique<int>(*(other.balance));
+        balance = std::make_unique<unsigned int>(*(other.balance));
         deposit = std::make_unique<unsigned int>(*(other.deposit));
         withdraw = std::make_unique<unsigned int>(*(other.withdraw));    
     }
@@ -104,11 +104,9 @@ class BankAccount{
     }
 
     void deposit_balance(unsigned int deps){
-        deps = *deposit;
         *balance += deps;
     }
     void withdraw_balance(unsigned int witd){
-        witd = *withdraw;
         *balance -= witd;
     }
 };
@@ -167,13 +165,23 @@ int main(){
             *balance = client.getBalance();
             *accountNumber = client.getAccountNumber();
         
-            std::cout << "Dados da conta: \n" << "Saldo: " << *balance << "\n" << "Nome: " << *nameClient << "\n" << "CPF: " << *cpfClient << "\n" << "Email: " << *emailClient << "\n" << "Numero da conta: " << *accountNumber << "\n";
+            std::cout << "Dados da conta: \n" << "Nome do cliente: " << *nameClient << "\n" << "CPF do cliente: " << *cpfClient << "\n" << "Email do cliente: " << *emailClient << "\n" << "Numero da conta: " << *accountNumber << "\n" << "Saldo da conta: " << *balance << "\n";
+        
         }else if(*choice == 3){
 
         std::cout << "Digite o valor a ser depositado: \n";
         std::cin >> std::ws >> *deposit;
         std::cin.clear();
-
+        client.deposit_balance(*deposit);
+        std::cout << "Deposito realizado com sucesso! \n" << "No valor de: " << *deposit << "\n";
+        }else if(*choice == 4){
+        
+        std::cout << "Digite o valor a ser sacado: \n";
+        std::cin >> std::ws >> *withdraw;
+        std::cin.clear();
+        client.withdraw_balance(*withdraw);
+        std::cout << "Saque realizado com sucesso! \n" << "No valor de: " << *withdraw << "\n";
+        
         } 
     }while(*choice != 5);
 
