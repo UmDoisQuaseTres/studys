@@ -1,6 +1,8 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <cstdlib>
+#include <cstring>
 
 class BankAccount{
     private:
@@ -99,37 +101,41 @@ class BankAccount{
 };
 int main(){
     //Declarando os smart pointers
-    std::unique_ptr<std::string> nameClient = std::make_unique<std::string>();
-    std::unique_ptr<std::string> cpfClient = std::make_unique<std::string>();
-    std::unique_ptr<std::string> emailClient = std::make_unique<std::string>();
-    std::unique_ptr<unsigned int> accountNumber = std::make_unique<unsigned int>();
-    std::unique_ptr<unsigned int> choice = std::make_unique<unsigned int>();
-    std::unique_ptr<int> balance = std::make_unique<int>();
-    std::unique_ptr<unsigned int> deposit = std::make_unique<unsigned int>();
-    std::unique_ptr<unsigned int> withdraw = std::make_unique<unsigned int>();
-
-    //Inicializando os smart pointers
-    
+    std::unique_ptr<std::string> nameClient = std::make_unique<std::string>("");
+    std::unique_ptr<std::string> cpfClient = std::make_unique<std::string>("");
+    std::unique_ptr<std::string> emailClient = std::make_unique<std::string>("");
+    std::unique_ptr<unsigned int> accountNumber = std::make_unique<unsigned int>(0);
+    std::unique_ptr<unsigned int> choice = std::make_unique<unsigned int>(0);
+    std::unique_ptr<int> balance = std::make_unique<int>(0);
+    std::unique_ptr<unsigned int> deposit = std::make_unique<unsigned int>(0);
+    std::unique_ptr<unsigned int> withdraw = std::make_unique<unsigned int>(0);
 
     BankAccount client(*nameClient, *cpfClient, *emailClient, *accountNumber, *balance, *deposit, *withdraw);
+
+    do{
     //Programa principal
-    std::cout << "Ola, seja bem vindo ao seu banco! \n" << "Escolha a opcao desejada \n" << "1 - Cadastrar cliente \n" << "2 - Consultar saldo \n" << "3 - Depositar \n" << "4 - Sacar \n" << "5 - Sair \n";
+    std::cout << "Ola, seja bem vindo ao seu banco! \n" << "Escolha a opcao desejada \n" << "1 - Cadastrar cliente \n" << "2 - Consultar conta \n" << "3 - Depositar \n" << "4 - Sacar \n" << "5 - Sair \n";
         std::cin >> *choice;
         std::cin.clear();
         if(*choice == 1){
 
             //Recebendo os dados via teclado
             std::cout << "Digite o nome do cliente: \n";
-            std::cin >> *nameClient;
+            std::getline(std::cin >> std::ws, *nameClient);
+            std::cin.clear();
             std::cout << "Digite o CPF do cliente: \n";
-            std::cin >> *cpfClient;
+            std::getline(std::cin >> std::ws, *cpfClient);
+            std::cin.clear();
             std::cout << "Digite o email do cliente: \n";
-            std::cin >> *emailClient;
+            std::getline(std::cin >> std::ws, *emailClient);
+            std::cin.clear();
             std::cout << "Digite o numero da conta: \n";
             std::cin >> *accountNumber;
+            std::cin.clear();
             std::cout << "Digite o saldo inicial: \n";
             std::cin >> *balance;
-
+            std::cin.clear();
+            
             //Salvando os dados no objeto
             client.setClientName(std::move(*nameClient));
             client.setClientCPF(std::move(*cpfClient));
@@ -140,16 +146,15 @@ int main(){
             //Mensagem de sucesso
             std::cout << "Cliente cadastrado com sucesso! \n";
         }else if(*choice == 2){
+            *nameClient = client.getClientName();
+            *cpfClient = client.getClientCPF();
+            *emailClient = client.getClientEmail();
             *balance = client.getBalance();
-            return *balance;
-        } /*else if(*choice == 3){
-            std::cout << "Digite o valor que deseja depositar: \n";
-            std::cin >> *balance;
-            client.setBalance(std::move(*balance));
-        }*/
+            *accountNumber = client.getAccountNumber();
         
-
-
+            std::cout << "Dados da conta: \n" << "Saldo: " << *balance << "\n" << "Nome: " << *nameClient << "\n" << "CPF: " << *cpfClient << "\n" << "Email: " << *emailClient << "\n" << "Numero da conta: " << *accountNumber << "\n";
+        } 
+    }while(*choice != 5);
 
         return 0;
 
